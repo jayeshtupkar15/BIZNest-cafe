@@ -54,7 +54,7 @@ export default function CustomerPage() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-[#fffaf6]">
-      <Navbar /> {/* Bright Navbar with Login button redirecting to /login */}
+      <Navbar cartCount={0} /> {/* Bright Navbar with Login button redirecting to /login */}
       <Hero /> {/* Hero section with background image */}
 
       {/* Main Content */}
@@ -75,11 +75,19 @@ export default function CustomerPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
           {menuItems.map((item) => (
             <MenuCard
-              key={item.key} // Use the new 'key' property here
-              title={item.title}
-              price={item.price}
-              description={item.description}
-              image={item.image}
+              key={item.key}
+              item={{
+                id: parseInt(item.key, 10), // Convert key to number
+                name: item.title, // Map title to name
+                description: item.description,
+                price: parseFloat(item.price), // Convert price to number
+                category: "Miscellaneous", // Default category
+                image: item.image, // Map imageUrl to image
+              }}
+              quantity={1} // Default quantity
+              onIncrement={() => {}}
+              onDecrement={() => {}}
+              onAdd={() => {}}
             />
           ))}
         </div>

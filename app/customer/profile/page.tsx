@@ -58,7 +58,7 @@ export default function ProfilePage() {
   }
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/Login" });
+    await signOut({ callbackUrl: "/login" });
   };
 
   return (

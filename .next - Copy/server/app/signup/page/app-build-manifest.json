@@ -1,0 +1,23 @@
+{
+  "pages": {
+    "/signup/page": [
+      "static/chunks/9d648_next_dist_bc90eb93._.js",
+      "static/chunks/cafe-management-system_app_favicon_ico_mjs_67f6c1a1._.js",
+      "static/chunks/[root-of-the-server]__1a67a690._.css",
+      "static/chunks/cafe-management-system_ce2a337a._.js",
+      "static/chunks/cafe-management-system_app_layout_tsx_58f92f55._.js",
+      "static/chunks/9d648_next_dist_client_components_builtin_global-error_54db848f.js",
+      "static/chunks/cafe-management-system_0f7a7e47._.js",
+      "static/chunks/cafe-management-system_app_signup_page_tsx_54db848f._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_127f2609._.js",
+      "static/chunks/9d648_next_dist_compiled_react-dom_8d1f9a9d._.js",
+      "static/chunks/9d648_next_dist_compiled_next-devtools_index_4fc5bfc8.js",
+      "static/chunks/9d648_next_dist_compiled_9df48900._.js",
+      "static/chunks/9d648_next_dist_client_db3b1f89._.js",
+      "static/chunks/9d648_next_dist_e5787e8e._.js",
+      "static/chunks/9d648_@swc_helpers_cjs_88d5982f._.js",
+      "static/chunks/cafe-management-system_a0ff3932._.js",
+      "static/chunks/turbopack-cafe-management-system_45a7dd96._.js"
+    ]
+  }
+}

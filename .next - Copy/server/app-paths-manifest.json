@@ -1,0 +1,12 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/auth/register/route": "app/api/auth/register/route.js",
+  "/customer/menu/page": "app/customer/menu/page.js",
+  "/customer/orders/page": "app/customer/orders/page.js",
+  "/customer/page": "app/customer/page.js",
+  "/customer/profile/page": "app/customer/profile/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
+  "/signup/page": "app/signup/page.js"
+}

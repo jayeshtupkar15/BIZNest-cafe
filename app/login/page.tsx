@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -16,13 +16,20 @@ import {
   Users,
   Crown,
 } from "lucide-react";
+import React from "react";
 
 export default function CustomerLoginPage() {
+  // Ensure consistent initial states for hydration
   const [form, setForm] = useState({ email: "", password: "" });
-  const [message, setMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
+
+  // Wrap client-specific logic in useEffect
+  useEffect(() => {
+    setShowPassword(false); // Ensure password visibility toggle starts in a consistent state
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -55,6 +62,17 @@ export default function CustomerLoginPage() {
       console.error("Login Error:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Avoid dynamic class names during SSR
+  const getMessageClassName = (message: string) => {
+    if (message.includes("❌")) {
+      return "bg-red-50 text-red-700 border border-red-200";
+    } else if (message.includes("✅")) {
+      return "bg-green-50 text-green-700 border border-green-200";
+    } else {
+      return "bg-amber-50 text-amber-700 border border-amber-200";
     }
   };
 
@@ -206,13 +224,9 @@ export default function CustomerLoginPage() {
             {/* Status Message */}
             {message && (
               <div
-                className={`text-center text-sm p-3 rounded-lg transition-all duration-200 ${
-                  message.includes("❌")
-                    ? "bg-red-50 text-red-700 border border-red-200"
-                    : message.includes("✅")
-                    ? "bg-green-50 text-green-700 border border-green-200"
-                    : "bg-amber-50 text-amber-700 border border-amber-200"
-                }`}
+                className={`text-center text-sm p-3 rounded-lg transition-all duration-200 ${getMessageClassName(
+                  message
+                )}`}
               >
                 {message}
               </div>

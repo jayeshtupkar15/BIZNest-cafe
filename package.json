@@ -6,8 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
-    "seed:menu": "ts-node seed/seedMenu.ts"
+    "lint": "eslint"
+    
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",

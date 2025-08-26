@@ -13,8 +13,7 @@ type MenuItem = {
   image: string;
 };
 
-type CartItem = {
-  item: MenuItem;
+type CartItem = MenuItem & {
   quantity: number;
 };
 
@@ -64,7 +63,7 @@ export default function OrdersPage() {
       removeItem(itemId);
     } else {
       const updatedCart = cart.map((cartItem) =>
-        cartItem.item.id === itemId
+        cartItem.id === itemId
           ? { ...cartItem, quantity: newQuantity }
           : cartItem
       );
@@ -73,7 +72,7 @@ export default function OrdersPage() {
   };
 
   const removeItem = (itemId: number) => {
-    const updatedCart = cart.filter((cartItem) => cartItem.item.id !== itemId);
+    const updatedCart = cart.filter((cartItem) => cartItem.id !== itemId);
     updateCart(updatedCart);
   };
 
@@ -89,8 +88,14 @@ export default function OrdersPage() {
     localStorage.removeItem("cart");
   };
 
-  // Calculate billing details
-  const subtotal = cart.reduce((total, cartItem) => total + cartItem.item.price * cartItem.quantity, 0);
+  // Calculate billing details with a safety check
+  const subtotal = cart.reduce((total, cartItem) => {
+    if (cartItem && typeof cartItem.price === 'number') {
+      return total + cartItem.price * cartItem.quantity;
+    }
+    return total;
+  }, 0);
+
   const tax = Math.round(subtotal * 0.18); // 18% GST
   const deliveryFee = subtotal > 500 ? 0 : 40;
   const total = subtotal + tax + deliveryFee;
@@ -144,46 +149,56 @@ export default function OrdersPage() {
                 </h2>
                 
                 <div className="space-y-4">
-                  {cart.map((cartItem) => (
-                    <div key={cartItem.item.id} className="flex items-center gap-4 p-4 bg-white/30 rounded-xl border border-white/10">
-                      <img
-                        src={cartItem.item.image}
-                        alt={cartItem.item.name}
-                        className="w-20 h-20 object-cover rounded-xl shadow-md"
-                      />
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold">{cartItem.item.name}</h3>
-                        <p className="text-sm text-[#5d4e41] mt-1">{cartItem.item.description}</p>
-                        <p className="text-lg font-semibold text-[#8b4513] mt-2">₹{cartItem.item.price} each</p>
+                  {cart
+                    .filter(
+                      (cartItem): cartItem is CartItem =>
+                        !!cartItem &&
+                        typeof cartItem.id === "number" &&
+                        typeof cartItem.image === "string" &&
+                        typeof cartItem.name === "string" &&
+                        typeof cartItem.price === "number" &&
+                        typeof cartItem.quantity === "number"
+                    )
+                    .map((cartItem) => (
+                      <div key={cartItem.id} className="flex items-center gap-4 p-4 bg-white/30 rounded-xl border border-white/10">
+                        <img
+                          src={cartItem.image}
+                          alt={cartItem.name}
+                          className="w-20 h-20 object-cover rounded-xl shadow-md"
+                        />
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold">{cartItem.name}</h3>
+                          <p className="text-sm text-[#5d4e41] mt-1">{cartItem.description}</p>
+                          <p className="text-lg font-semibold text-[#8b4513] mt-2">₹{cartItem.price} each</p>
+                        </div>
+                        
+                        {/* Quantity Controls */}
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
+                            className="w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-[#8b4513] font-bold hover:bg-gray-50 transition"
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center font-semibold">{cartItem.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
+                            className="w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-[#8b4513] font-bold hover:bg-gray-50 transition"
+                          >
+                            +
+                          </button>
+                        </div>
+                        
+                        <div className="text-right">
+                          <p className="text-lg font-bold">₹{cartItem.price * cartItem.quantity}</p>
+                          <button
+                            onClick={() => removeItem(cartItem.id)}
+                            className="text-red-500 text-sm hover:text-red-700 transition mt-1"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                      
-                      {/* Quantity Controls */}
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity - 1)}
-                          className="w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-[#8b4513] font-bold hover:bg-gray-50 transition"
-                        >
-                          -
-                        </button>
-                        <span className="w-8 text-center font-semibold">{cartItem.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(cartItem.item.id, cartItem.quantity + 1)}
-                          className="w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-[#8b4513] font-bold hover:bg-gray-50 transition"
-                        >
-                          +
-                        </button>
-                      </div>
-                      
-                      <div className="text-right">
-                        <p className="text-lg font-bold">₹{cartItem.item.price * cartItem.quantity}</p>
-                        <button
-                          onClick={() => removeItem(cartItem.item.id)}
-                          className="text-red-500 text-sm hover:text-red-700 transition mt-1"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
                   ))}
                 </div>
               </div>
@@ -202,12 +217,12 @@ export default function OrdersPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span className="font-semibold">₹{subtotal}</span>
+                    <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
                   </div>
                   
                   <div className="flex justify-between">
                     <span>GST (18%)</span>
-                    <span className="font-semibold">₹{tax}</span>
+                    <span className="font-semibold">₹{tax.toFixed(2)}</span>
                   </div>
                   
                   <div className="flex justify-between">
@@ -216,7 +231,7 @@ export default function OrdersPage() {
                       {deliveryFee === 0 ? (
                         <span className="text-green-600">FREE</span>
                       ) : (
-                        `₹${deliveryFee}`
+                        `₹${deliveryFee.toFixed(2)}`
                       )}
                     </span>
                   </div>
@@ -230,7 +245,7 @@ export default function OrdersPage() {
                   <div className="border-t border-[#8b4513]/20 pt-4">
                     <div className="flex justify-between text-xl font-bold">
                       <span>Total</span>
-                      <span className="text-[#8b4513]">₹{total}</span>
+                      <span className="text-[#8b4513]">₹{total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -242,7 +257,7 @@ export default function OrdersPage() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l-2.5-5M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6" />
                   </svg>
-                  Place Order - ₹{total}
+                  Place Order - ₹{total.toFixed(2)}
                 </button>
                 
                 <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">

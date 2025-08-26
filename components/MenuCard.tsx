@@ -37,11 +37,11 @@ export default function MenuCard({ item, quantity, onIncrement, onDecrement, onA
   } = item;
 
   return (
-    <div 
-      className="flex-shrink-0 w-80 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:scale-105 border border-white/50 cursor-pointer group" 
-      style={{ scrollSnapAlign: "start" }}
-      onClick={onClick}
-    >
+    <div
+  className="flex-shrink-0 w-full sm:w-80 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 sm:hover:-translate-y-4 hover:scale-102 border border-white/50 cursor-pointer group"
+  style={{ scrollSnapAlign: "start" }}
+  onClick={onClick}
+>
       <div className="h-56 overflow-hidden relative">
         <img 
           src={image} 

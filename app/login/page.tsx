@@ -19,16 +19,14 @@ import {
 import React from "react";
 
 export default function CustomerLoginPage() {
-  // Ensure consistent initial states for hydration
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
 
-  // Wrap client-specific logic in useEffect
   useEffect(() => {
-    setShowPassword(false); // Ensure password visibility toggle starts in a consistent state
+    setShowPassword(false);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +44,7 @@ export default function CustomerLoginPage() {
         redirect: false,
         email: form.email,
         password: form.password,
-        role: "customer", // This page is exclusively for customer login
+        role: "customer",
       });
 
       if (res?.error) {
@@ -54,7 +52,7 @@ export default function CustomerLoginPage() {
       } else {
         setMessage("✅ Welcome back to BIZ Nest Cafe!");
         setTimeout(() => {
-          router.push("/"); // Redirect to the default customer landing page
+          router.push("/");
         }, 1000);
       }
     } catch (error) {
@@ -65,28 +63,27 @@ export default function CustomerLoginPage() {
     }
   };
 
-  // Avoid dynamic class names during SSR
   const getMessageClassName = (message: string) => {
     if (message.includes("❌")) {
-      return "bg-red-50 text-red-700 border border-red-200";
+      return "bg-red-50/90 text-red-800 border border-red-200";
     } else if (message.includes("✅")) {
-      return "bg-green-50 text-green-700 border border-green-200";
+      return "bg-green-50/90 text-green-800 border border-green-200";
     } else {
-      return "bg-amber-50 text-amber-700 border border-amber-200";
+      return "bg-amber-50/90 text-amber-800 border border-amber-200";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#fcf8f3] via-[#f5f1ec] to-[#ede3d8] flex items-center justify-center p-4">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238b4513' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
-      </div>
+    <div
+      className="min-h-screen flex items-center justify-center p-4 relative"
+      style={{
+        backgroundImage: `url("https://i.pinimg.com/736x/a6/b7/4f/a6b74f20e9063a9295e614a00b1e626a.jpg")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Overlay for readability */}
+      <div className="absolute inset-0 bg-black/50" />
 
       <div className="relative w-full max-w-md animate-fade-in">
         {/* Logo and Welcome Section */}
@@ -96,85 +93,83 @@ export default function CustomerLoginPage() {
               <CoffeeIcon className="w-8 h-8 text-white" />
             </div>
             <div className="text-left">
-              <h1 className="text-2xl font-bold">
-                <span className="bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold text-white">
+                <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">
                   BIZ
                 </span>
-                <span className="ml-1 text-[#3b2b20]">Nest</span>
+                <span className="ml-1 text-white">Nest</span>
               </h1>
-              <p className="text-amber-600 text-sm font-medium">Cafe</p>
+              <p className="text-amber-300 text-sm font-medium">Cafe</p>
             </div>
           </div>
-          <h2 className="text-3xl font-bold text-[#3b2b20] mb-2">
+          <h2 className="text-3xl font-bold text-white mb-2">
             Welcome Back! ☕
           </h2>
-          <p className="text-[#5d4e41] text-lg">
+          <p className="text-gray-200 text-lg">
             Sign in to your account and enjoy our delicious menu
           </p>
         </div>
 
         {/* Role Selection Links */}
-        <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-2 mb-6 flex justify-between items-center">
+        <div className="bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 p-2 mb-6 flex justify-between items-center">
           <Link
             href="/login"
-            className="flex-1 flex flex-col items-center p-2 rounded-lg transition-all duration-300 bg-white shadow"
+            className="flex-1 flex flex-col items-center p-2 rounded-lg transition-all duration-300 bg-white/30"
           >
-            <User className="h-6 w-6 text-amber-600" />
-            <span className="text-xs font-semibold mt-1 text-amber-600">
+            <User className="h-6 w-6 text-amber-300" />
+            <span className="text-xs font-semibold mt-1 text-white">
               Customer
             </span>
           </Link>
 
           <Link
             href="/staff/login"
-            className="flex-1 flex flex-col items-center p-2 rounded-lg transition-all duration-300 hover:bg-gray-200"
+            className="flex-1 flex flex-col items-center p-2 rounded-lg transition-all duration-300 hover:bg-white/20"
           >
-            <Users className="h-6 w-6 text-gray-400" />
-            <span className="text-xs font-semibold mt-1 text-gray-500">
+            <Users className="h-6 w-6 text-gray-300" />
+            <span className="text-xs font-semibold mt-1 text-gray-200">
               Staff
             </span>
           </Link>
 
           <Link
             href="/admin/login"
-            className="flex-1 flex flex-col items-center p-2 rounded-lg transition-all duration-300 hover:bg-gray-200"
+            className="flex-1 flex flex-col items-center p-2 rounded-lg transition-all duration-300 hover:bg-white/20"
           >
-            <Crown className="h-6 w-6 text-gray-400" />
-            <span className="text-xs font-semibold mt-1 text-gray-500">
+            <Crown className="h-6 w-6 text-gray-300" />
+            <span className="text-xs font-semibold mt-1 text-gray-200">
               Admin
             </span>
           </Link>
         </div>
 
-        <p className="text-center text-[#5d4e41] mb-6">
+        <p className="text-center text-gray-200 mb-6">
           👤 Access the menu and place new orders.
         </p>
 
         {/* Login Form */}
-        <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
+        <div className="bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Input */}
             <div>
-              <label className="block text-sm font-semibold text-[#3b2b20] mb-2">
+              <label className="block text-sm font-semibold text-white mb-2">
                 <MailIcon className="inline-block h-4 w-4 mr-2 align-text-bottom" />
                 Email Address
               </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={form.email}
-                  onChange={handleChange}
-                  className="w-full bg-white/50 border border-white/30 rounded-xl px-4 py-3 text-[#3b2b20] placeholder-[#5d4e41]/60 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all duration-200"
-                  required
-                />
-              </div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={form.email}
+                onChange={handleChange}
+                className="w-full bg-white/40 border border-white/30 rounded-xl px-4 py-3 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
+                required
+              />
             </div>
 
             {/* Password Input */}
             <div>
-              <label className="block text-sm font-semibold text-[#3b2b20] mb-2">
+              <label className="block text-sm font-semibold text-white mb-2">
                 <LockIcon className="inline-block h-4 w-4 mr-2 align-text-bottom" />
                 Password
               </label>
@@ -185,13 +180,13 @@ export default function CustomerLoginPage() {
                   placeholder="Enter your password"
                   value={form.password}
                   onChange={handleChange}
-                  className="w-full bg-white/50 border border-white/30 rounded-xl px-4 py-3 text-[#3b2b20] placeholder-[#5d4e41]/60 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all duration-200"
+                  className="w-full bg-white/40 border border-white/30 rounded-xl px-4 py-3 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#5d4e41] hover:text-[#3b2b20] transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-200 hover:text-white transition-colors"
                 >
                   {showPassword ? (
                     <EyeOffIcon className="h-5 w-5" />
@@ -206,7 +201,7 @@ export default function CustomerLoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-[#8b4513] to-[#cd853f] text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-700 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-70 flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -233,13 +228,13 @@ export default function CustomerLoginPage() {
             )}
           </form>
 
-          {/* Conditional Sign Up Link */}
-          <div className="text-center mt-8 text-[#5d4e41]">
+          {/* Sign Up Link */}
+          <div className="text-center mt-8 text-gray-200">
             <p>
               New to BIZ Nest Cafe?{" "}
               <Link
                 href="/signup"
-                className="font-semibold text-amber-600 hover:text-amber-700 transition-colors"
+                className="font-semibold text-amber-300 hover:text-amber-400 transition-colors"
               >
                 Create an account ✨
               </Link>
@@ -248,7 +243,7 @@ export default function CustomerLoginPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8 text-[#5d4e41] text-sm">
+        <div className="text-center mt-8 text-gray-200 text-sm">
           <p>🔒 Your data is secure with us</p>
           <p className="mt-2">© 2024 BIZ Nest Cafe. All rights reserved.</p>
         </div>

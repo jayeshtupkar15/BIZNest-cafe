@@ -28,55 +28,90 @@ export default function Footer() {
 
           {/* Socials */}
           <div className="flex justify-center gap-4 text-[#7a5a40]">
-            <a href="#" className="hover:text-amber-500 transition-colors duration-200" aria-label="Instagram">
+            <a
+              href="#"
+              className="hover:text-amber-500 transition-colors duration-200"
+              aria-label="Instagram"
+            >
               <FaInstagram size={20} />
             </a>
-            <a href="#" className="hover:text-amber-500 transition-colors duration-200" aria-label="Twitter">
+            <a
+              href="#"
+              className="hover:text-amber-500 transition-colors duration-200"
+              aria-label="Twitter"
+            >
               <FaTwitter size={20} />
             </a>
-            <a href="#" className="hover:text-amber-500 transition-colors duration-200" aria-label="Facebook">
+            <a
+              href="#"
+              className="hover:text-amber-500 transition-colors duration-200"
+              aria-label="Facebook"
+            >
               <FaFacebookF size={20} />
             </a>
           </div>
         </div>
 
-        {/* === Middle: Quick Links + Contact (always horizontal) === */}
+        {/* === Middle: Quick Links + Contact === */}
         <div className="mt-10">
-          {/* Keep horizontally side-by-side on ALL screens. On small screens this row scrolls. */}
-          <div className="flex flex-nowrap justify-center gap-16 overflow-x-auto px-1 md:overflow-visible md:flex-wrap">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 text-center md:text-left">
             {/* Quick Links */}
-            <div className="min-w-[260px] md:min-w-0 md:w-1/3">
-              <h5 className="text-lg font-semibold mb-3 text-amber-500">Quick Links</h5>
+            <div>
+              <h5 className="text-lg font-semibold mb-3 text-amber-500">
+                Quick Links
+              </h5>
               <ul className="space-y-2 text-[#7a5a40]">
                 <li>
-                  <a href="/customer" className="hover:text-amber-500 transition-colors duration-200">Home</a>
+                  <a
+                    href="/customer"
+                    className="hover:text-amber-500 transition-colors duration-200"
+                  >
+                    Home
+                  </a>
                 </li>
                 <li>
-                  <a href="/customer/menu" className="hover:text-amber-500 transition-colors duration-200">Menu</a>
+                  <a
+                    href="/customer/menu"
+                    className="hover:text-amber-500 transition-colors duration-200"
+                  >
+                    Menu
+                  </a>
                 </li>
                 <li>
-                  <a href="/customer/orders" className="hover:text-amber-500 transition-colors duration-200">Orders</a>
+                  <a
+                    href="/customer/orders"
+                    className="hover:text-amber-500 transition-colors duration-200"
+                  >
+                    Orders
+                  </a>
                 </li>
                 <li>
-                  <a href="/customer/profile" className="hover:text-amber-500 transition-colors duration-200">Profile</a>
+                  <a
+                    href="/customer/profile"
+                    className="hover:text-amber-500 transition-colors duration-200"
+                  >
+                    Profile
+                  </a>
                 </li>
               </ul>
             </div>
 
             {/* Contact Us */}
-            <div className="min-w-[260px] md:min-w-0 md:w-1/3">
-              <h5 className="text-lg font-semibold mb-3 text-amber-500">Contact Us</h5>
-              <ul className="space-y-2 text-[#7a5a40]">
-                <li className="flex items-start gap-3">
-                  <FaMapMarkerAlt className="mt-1" />
+            <div>
+              <h5 className="text-lg font-semibold mb-3 text-amber-500">
+                Contact Us
+              </h5>
+              <ul className="space-y-3 text-[#7a5a40]">
+                <li className="flex justify-center md:justify-start items-start gap-3">
+                  <FaMapMarkerAlt className="mt-1 shrink-0" />
                   <span>123 Coffee Street, Coffee City, USA</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <FaPhoneAlt className="mt-1" />
+                <li className="flex justify-center md:justify-start items-start gap-3">
+                  <FaPhoneAlt className="mt-1 shrink-0" />
                   <span>+1 (555) 123-4567</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <FaEnvelope className="mt-1" />
+                <li className="flex justify-center md:justify-start items-start gap-3">
+                  <FaEnvelope className="mt-1 shrink-0" />
                   <span>contact@biznestcafe.com</span>
                 </li>
               </ul>

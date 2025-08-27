@@ -5,6 +5,7 @@ import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 
 // -------------------- Types --------------------
+// Base type from MenuPage for compatibility
 type MenuItem = {
   id: number;
   name: string;
@@ -13,7 +14,14 @@ type MenuItem = {
   image: string;
 };
 
+// Flattened type for use within this page's state
 type CartItem = MenuItem & {
+  quantity: number;
+};
+
+// Type for the nested structure stored in localStorage by MenuPage
+type StoredCartEntry = {
+  item: MenuItem;
   quantity: number;
 };
 
@@ -42,20 +50,38 @@ export default function OrdersPage() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
+  // ✅ CORRECTED: Load and transform data from localStorage
   useEffect(() => {
     try {
-      const savedCart = localStorage.getItem("cart");
-      if (savedCart) {
-        setCart(JSON.parse(savedCart));
+      const savedCartJSON = localStorage.getItem("cart");
+      if (savedCartJSON) {
+        const savedCart: StoredCartEntry[] = JSON.parse(savedCartJSON);
+        // Transform the nested structure to the flat structure this page uses
+        const transformedCart = savedCart.map((entry) => ({
+          ...entry.item,
+          quantity: entry.quantity,
+        }));
+        setCart(transformedCart);
       }
     } catch (error) {
       console.error("Failed to parse cart from localStorage", error);
     }
   }, []);
 
+  // ✅ CORRECTED: Transform data back before saving to localStorage
   const updateCart = (newCart: CartItem[]) => {
+    // Update the state for this page's UI
     setCart(newCart);
-    localStorage.setItem("cart", JSON.stringify(newCart));
+
+    // Transform the flat structure back to the nested one for MenuPage compatibility
+    const cartToSave: StoredCartEntry[] = newCart.map(
+      ({ quantity, ...itemData }) => ({
+        item: itemData,
+        quantity: quantity,
+      })
+    );
+
+    localStorage.setItem("cart", JSON.stringify(cartToSave));
   };
 
   const updateQuantity = (itemId: number, newQuantity: number) => {
@@ -90,13 +116,14 @@ export default function OrdersPage() {
 
   // Calculate billing details with a safety check
   const subtotal = cart.reduce((total, cartItem) => {
-    if (cartItem && typeof cartItem.price === 'number') {
+    // The price is now correctly accessed from the flattened cartItem
+    if (cartItem && typeof cartItem.price === "number") {
       return total + cartItem.price * cartItem.quantity;
     }
     return total;
   }, 0);
 
-  const tax = Math.round(subtotal * 0.18); // 18% GST
+  const tax = subtotal * 0.18; // 18% GST (changed to float for accuracy)
   const deliveryFee = subtotal > 500 ? 0 : 40;
   const total = subtotal + tax + deliveryFee;
 
@@ -236,7 +263,7 @@ export default function OrdersPage() {
                     </span>
                   </div>
                   
-                  {deliveryFee > 0 && (
+                  {deliveryFee > 0 && subtotal > 0 && (
                     <p className="text-xs text-[#5d4e41]">
                       Free delivery on orders above ₹500
                     </p>

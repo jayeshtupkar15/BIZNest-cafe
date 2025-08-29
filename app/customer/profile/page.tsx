@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Navbar from "../../../components/Navbar";
 import Link from "next/link";
 import { Session } from "next-auth";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // Extend the Session type to include the user's role
 interface CustomSession extends Session {
@@ -17,6 +19,16 @@ interface CustomSession extends Session {
 
 export default function ProfilePage() {
   const { data: session } = useSession() as { data: CustomSession | null };
+  const router = useRouter();
+
+  // 🚀 Redirect staff/admin away from this page
+  useEffect(() => {
+    if (session?.user?.role === "staff") {
+      router.push("/staff/dashboard");
+    } else if (session?.user?.role === "admin") {
+      router.push("/admin/dashboard");
+    }
+  }, [session, router]);
 
   if (!session) {
     return (
@@ -32,6 +44,11 @@ export default function ProfilePage() {
         </Link>
       </div>
     );
+  }
+
+  // ❌ If staff/admin somehow still loads, don't show profile
+  if (session.user?.role !== "customer") {
+    return null; 
   }
 
   const handleLogout = async () => {

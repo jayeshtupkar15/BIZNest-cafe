@@ -7,7 +7,7 @@ const uri = process.env.MONGODB_URI as string;
 
 async function connectDB() {
   if (mongoose.connection.readyState === 0) {
-    await mongoose.connect(uri, { dbName: "cafe-management-system" });
+    await mongoose.connect(uri, { dbName: "test" });
   }
 }
 

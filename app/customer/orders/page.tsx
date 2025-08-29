@@ -102,17 +102,44 @@ export default function OrdersPage() {
     updateCart(updatedCart);
   };
 
-  const handlePurchase = () => {
-    if (cart.length === 0) {
-      setModalMessage("Your cart is empty! Add some delicious items first.");
-      setShowModal(true);
-      return;
-    }
+  const handlePurchase = async () => {
+  if (cart.length === 0) {
+    setModalMessage("Your cart is empty! Add some delicious items first.");
+    setShowModal(true);
+    return;
+  }
+
+  try {
+    const orderData = {
+      customerName: "Guest User", // later: session.user?.name
+      items: cart.map((c) => ({
+        name: c.name,
+        price: c.price,
+        quantity: c.quantity,
+      })),
+      total, // ✅ matches your API schema
+    };
+
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!res.ok) throw new Error("Failed to place order");
+
     setModalMessage("Order placed successfully! We'll prepare it fresh for you.");
     setShowModal(true);
     setCart([]);
     localStorage.removeItem("cart");
-  };
+  } catch (error) {
+    console.error("Order placement failed", error);
+    setModalMessage("Something went wrong while placing your order. Try again!");
+    setShowModal(true);
+  }
+};
+
+
 
   // Calculate billing details with a safety check
   const subtotal = cart.reduce((total, cartItem) => {

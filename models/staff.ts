@@ -1,19 +1,25 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
-export interface IStaff extends Document {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  designation?: string;
-}
+const StaffSchema = new Schema(
+  {
+    name: { type: String, required: [true, "Name is required"] },
+    email: { type: String, required: [true, "Email is required"], unique: true },
+    phone: { type: String, required: [true, "Phone number is required"] },
+    password: { type: String, required: [true, "Password is required"] },
+    role: {
+  type: String,
+  enum: ["manager", "cashier", "chef", "waiter", "cleaner", "barista"],
+  required: true,
+},
+    salary: { type: Number, default: 0 },
+    shift: {
+      type: String,
+      enum: ["Morning", "Afternoon", "Evening", "Night"],
+      default: "Morning",
+    },
+  },
+  { timestamps: true }
+);
 
-const StaffSchema = new Schema<IStaff>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, default: "staff" },
-  designation: { type: String, default: "barista" },
-});
-
-export default mongoose.models.Staff || mongoose.model<IStaff>("Staff", StaffSchema, "staff");
+const Staff = models.Staff || model("Staff", StaffSchema);
+export default Staff;

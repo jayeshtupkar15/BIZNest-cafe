@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import MenuItem from "@/models/MenuItem";
 
@@ -10,8 +10,11 @@ async function connectDB() {
   }
 }
 
-// PUT → update a menu item
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+// -------------------- PUT → Update a menu item --------------------
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     await connectDB();
     const { id } = params;
@@ -29,8 +32,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-// DELETE → remove a menu item
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+// -------------------- DELETE → Remove a menu item --------------------
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     await connectDB();
     const { id } = params;
